@@ -1,116 +1,73 @@
 // Loading Screen
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
-    setTimeout(() => {
-        loader.classList.add('fade-out');
-    }, 1500);
+    setTimeout(() => loader.classList.add('fade-out'), 1500);
 });
 
 // Custom Cursor
 const cursor = document.querySelector('.cursor');
 const cursorFollower = document.querySelector('.cursor-follower');
-
 if (window.innerWidth > 768) {
     document.addEventListener('mousemove', (e) => {
         cursor.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
         cursorFollower.style.transform = `translate(${e.clientX - 15}px, ${e.clientY - 15}px)`;
     });
-
     document.addEventListener('mousedown', () => {
         cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
         cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
     });
-
     document.addEventListener('mouseup', () => {
         cursor.style.transform = 'translate(-50%, -50%) scale(1)';
         cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
     });
 }
 
-// Particles Effect
+// Particles
 const canvas = document.getElementById('particles-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
+function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
 function createParticles() {
-    const particleCount = Math.min(window.innerWidth / 10, 100);
-    for (let i = 0; i < particleCount; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 2,
-            speedX: (Math.random() - 0.5) * 0.5,
-            speedY: (Math.random() - 0.5) * 0.5,
-            color: `rgba(255, 79, 216, ${Math.random() * 0.5})`
-        });
+    for (let i = 0; i < Math.min(innerWidth / 10, 100); i++) {
+        particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 2, speedX: (Math.random() - 0.5) * 0.5, speedY: (Math.random() - 0.5) * 0.5, color: `rgba(255, 79, 216, ${Math.random() * 0.5})` });
     }
 }
-
 function animateParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    particles.forEach(particle => {
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
-        
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
-        
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
+    particles.forEach(p => {
+        p.x += p.speedX; p.y += p.speedY;
+        if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
     });
-    
     requestAnimationFrame(animateParticles);
 }
-
-window.addEventListener('resize', () => {
-    resizeCanvas();
-    particles = [];
-    createParticles();
-});
-
-resizeCanvas();
-createParticles();
-animateParticles();
+window.addEventListener('resize', () => { resizeCanvas(); particles = []; createParticles(); });
+resizeCanvas(); createParticles(); animateParticles();
 
 // Scroll Progress
 window.addEventListener('scroll', () => {
     const winScroll = document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - window.innerHeight;
-    const scrolled = (winScroll / height) * 100;
-    document.querySelector('.progress-bar').style.width = scrolled + '%';
+    document.querySelector('.progress-bar').style.width = (winScroll / height) * 100 + '%';
 });
 
-// Navbar Scroll Effect
+// Navbar Scroll
 window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
-    if (window.scrollY > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
+    if (window.scrollY > 100) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
 });
 
-// Hamburger Menu
+// Hamburger
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
-
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
     document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
 });
-
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         hamburger.classList.remove('active');
@@ -120,200 +77,100 @@ navLinks.forEach(link => {
 });
 
 // Typing Animation
-const typer = () => {
-    const text = document.querySelector('.typing-text');
-    if (!text) return;
-    
-    const words = ['Developer', 'Designer', 'Creator'];
-    let i = 0;
-    let j = 0;
-    let isDeleting = false;
-    
-    function type() {
-        const currentWord = words[i];
-        if (isDeleting) {
-            text.textContent = currentWord.substring(0, j - 1);
-            j--;
-        } else {
-            text.textContent = currentWord.substring(0, j + 1);
-            j++;
-        }
-        
-        if (!isDeleting && j === currentWord.length) {
-            isDeleting = true;
-            setTimeout(type, 2000);
-        } else if (isDeleting && j === 0) {
-            isDeleting = false;
-            i = (i + 1) % words.length;
-            setTimeout(type, 500);
-        } else {
-            setTimeout(type, 100);
-        }
-    }
-    
-    type();
-};
+const words = ['Developer', 'Designer', 'Creator'];
+let i = 0, j = 0, isDeleting = false;
+const textEl = document.querySelector('.typing-text');
+function type() {
+    const current = words[i];
+    textEl.textContent = isDeleting ? current.substring(0, j - 1) : current.substring(0, j + 1);
+    isDeleting ? j-- : j++;
+    if (!isDeleting && j === current.length) { isDeleting = true; setTimeout(type, 2000); }
+    else if (isDeleting && j === 0) { isDeleting = false; i = (i + 1) % words.length; setTimeout(type, 500); }
+    else setTimeout(type, 100);
+}
+setTimeout(type, 500);
 
-setTimeout(typer, 500);
-
-// Skill Bar Animation
-const skillBars = document.querySelectorAll('.skill-progress');
-
-function animateSkillBars() {
-    skillBars.forEach(bar => {
-        const width = bar.getAttribute('data-width');
-        bar.style.width = width + '%';
+// Skill data
+const skills = [
+    { category: "Frontend", items: [{ name: "React.js", percent: 95 }, { name: "Vue.js", percent: 88 }, { name: "Three.js", percent: 85 }] },
+    { category: "Backend", items: [{ name: "Node.js", percent: 92 }, { name: "Python", percent: 87 }, { name: "GraphQL", percent: 82 }] },
+    { category: "Tools", items: [{ name: "Figma", percent: 90 }, { name: "Docker", percent: 78 }, { name: "MongoDB", percent: 85 }] }
+];
+function loadSkills() {
+    const container = document.getElementById('skillsGrid');
+    if (!container) return;
+    container.innerHTML = '';
+    skills.forEach(skillCat => {
+        const card = document.createElement('div'); card.className = 'skill-category glass-card';
+        card.innerHTML = `<h3><i class="fas fa-code"></i> ${skillCat.category}</h3>`;
+        skillCat.items.forEach(item => {
+            card.innerHTML += `<div class="skill-item"><div class="skill-info"><span>${item.name}</span><span>${item.percent}%</span></div><div class="skill-bar"><div class="skill-progress" data-width="${item.percent}"></div></div></div>`;
+        });
+        container.appendChild(card);
     });
 }
+loadSkills();
 
-// Intersection Observer for Animations
-const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            if (entry.target.classList.contains('skill-progress')) {
-                const width = entry.target.getAttribute('data-width');
-                entry.target.style.width = width + '%';
-            }
-            entry.target.classList.add('animated');
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-skillBars.forEach(bar => observer.observe(bar));
-
-// Projects Data
+// Projects DATA dengan LINK DRIVE (GANTI DRIVE LINK KAMU)
 const projects = [
-    {
-        title: 'AI Assistant Website',
-        desc: 'Intelligent AI-powered assistant with voice recognition and natural language processing.',
-        tech: ['React', 'OpenAI', 'Tailwind'],
-        demo: '#',
-        github: '#'
-    },
-    {
-        title: 'Smart IoT Dashboard',
-        desc: 'Real-time IoT device monitoring dashboard with predictive analytics.',
-        tech: ['Vue.js', 'D3.js', 'MQTT'],
-        demo: '#',
-        github: '#'
-    },
-    {
-        title: 'Cyberpunk E-Commerce UI',
-        desc: 'Futuristic e-commerce platform with neon aesthetics and 3D product views.',
-        tech: ['Three.js', 'Next.js', 'Stripe'],
-        demo: '#',
-        github: '#'
-    },
-    {
-        title: 'Modern Portfolio Website',
-        desc: 'Creative portfolio showcasing cutting-edge web design and animations.',
-        tech: ['GSAP', 'WebGL', 'SASS'],
-        demo: '#',
-        github: '#'
-    },
-    {
-        title: 'Futuristic Chat App',
-        desc: 'Real-time messaging app with end-to-end encryption and animated UI.',
-        tech: ['Socket.io', 'Express', 'MongoDB'],
-        demo: '#',
-        github: '#'
-    }
+    { title: 'AI Assistant', desc: 'AI with voice recognition', tech: ['React', 'OpenAI'], image: 'https://i.postimg.cc/7Y9qjK8R/IMG-20250510-210656.jpg', drive: 'https://drive.google.com/drive/folders/xxxxx1' },
+    { title: 'IoT Dashboard', desc: 'Real-time IoT monitoring', tech: ['Vue', 'D3'], image: 'https://i.postimg.cc/7Y9qjK8R/IMG-20250510-210656.jpg', drive: 'https://drive.google.com/drive/folders/xxxxx2' },
+    { title: 'Cyberpunk E-Commerce', desc: 'Futuristic e-commerce', tech: ['Three.js', 'Next'], image: 'https://i.postimg.cc/7Y9qjK8R/IMG-20250510-210656.jpg', drive: 'https://drive.google.com/drive/folders/xxxxx3' },
+    { title: 'Modern Portfolio', desc: 'Creative portfolio', tech: ['GSAP', 'WebGL'], image: 'https://i.postimg.cc/7Y9qjK8R/IMG-20250510-210656.jpg', drive: 'https://drive.google.com/drive/folders/xxxxx4' },
+    { title: 'Chat App', desc: 'Real-time messaging', tech: ['Socket.io', 'Express'], image: 'https://i.postimg.cc/7Y9qjK8R/IMG-20250510-210656.jpg', drive: 'https://drive.google.com/drive/folders/xxxxx5' }
 ];
 
-const icons = ['🤖', '📡', '⚡', '🎨', '💬'];
-
 function loadProjects() {
-    const container = document.getElementById('projects-grid');
+    const container = document.getElementById('projectsGrid');
     if (!container) return;
-    
-    projects.forEach((project, index) => {
-        const projectCard = document.createElement('div');
-        projectCard.className = 'project-card';
-        projectCard.innerHTML = `
-            <div class="project-image">
-                <div style="font-size: 4rem;">${icons[index % icons.length]}</div>
-            </div>
+    container.innerHTML = '';
+    projects.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => window.open(p.drive, '_blank');
+        card.innerHTML = `
+            <div class="project-image"><img src="${p.image}" alt="${p.title}" style="width:100%; height:100%; object-fit:cover;"></div>
             <div class="project-info">
-                <h3 class="project-title">${project.title}</h3>
-                <p class="project-desc">${project.desc}</p>
-                <div class="project-tech">
-                    ${project.tech.map(t => `<span>${t}</span>`).join('')}
-                </div>
-                <div class="project-buttons">
-                    <a href="${project.demo}" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">Demo</a>
-                    <a href="${project.github}" class="btn btn-secondary" style="padding: 8px 20px; font-size: 0.9rem;">GitHub</a>
-                </div>
+                <h3>${p.title}</h3>
+                <p>${p.desc}</p>
+                <div class="project-tech">${p.tech.map(t => `<span>${t}</span>`).join('')}</div>
             </div>
         `;
-        container.appendChild(projectCard);
+        container.appendChild(card);
     });
 }
+loadProjects();
 
-// Timeline Observer
-const timelineItems = document.querySelectorAll('.timeline-item');
-
-const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateX(0)';
-            timelineObserver.unobserve(entry.target);
-        }
+// Experience
+const experiences = [
+    { date: "2023 - Now", title: "Senior Frontend Dev", company: "CyberTech", desc: "Leading futuristic web apps.", tech: ["React", "Three.js"] },
+    { date: "2021 - 2023", title: "Full Stack Dev", company: "Neon Labs", desc: "Fullstack modern apps.", tech: ["Node.js", "Vue"] },
+    { date: "2019 - 2021", title: "UI/UX Designer", company: "Digital Dreams", desc: "Designed futuristic interfaces.", tech: ["Figma", "Adobe XD"] }
+];
+function loadExperience() {
+    const container = document.getElementById('timeline');
+    if (!container) return;
+    container.innerHTML = '';
+    experiences.forEach(exp => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.innerHTML = `<div class="timeline-dot"></div><div class="timeline-content glass-card"><span class="timeline-date">${exp.date}</span><h3>${exp.title}</h3><h4>${exp.company}</h4><p>${exp.desc}</p><div class="timeline-tech">${exp.tech.map(t => `<span>${t}</span>`).join('')}</div></div>`;
+        container.appendChild(item);
     });
-}, { threshold: 0.2 });
-
-timelineItems.forEach(item => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateX(-30px)';
-    timelineObserver.observe(item);
-});
+}
+loadExperience();
 
 // Contact Form
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Message sent successfully! Thank you for reaching out.');
-        contactForm.reset();
-    });
-}
+document.getElementById('contact-form')?.addEventListener('submit', (e) => { e.preventDefault(); alert('Message sent!'); e.target.reset(); });
 
-// Active Menu on Scroll
+// Active Menu
 const sections = document.querySelectorAll('section');
-const navItems = document.querySelectorAll('.nav-link');
-
 window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 200;
-        if (scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href') === `#${current}`) {
-            item.classList.add('active');
-        }
-    });
+    sections.forEach(section => { if (scrollY >= section.offsetTop - 200) current = section.getAttribute('id'); });
+    document.querySelectorAll('.nav-link').forEach(link => { link.classList.remove('active'); if (link.getAttribute('href') === `#${current}`) link.classList.add('active'); });
 });
-
-// Smooth Scroll for Anchor Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
+    anchor.addEventListener('click', function(e) { e.preventDefault(); document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); });
 });
-
-loadProjects();
