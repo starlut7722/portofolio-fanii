@@ -211,39 +211,39 @@ loadSkills();
 // ==================== PROYEK (GANTI FOTO & DRIVE DI SINI) ====================
 const projects = [
     {
-        title: 'Poster Event',
+        title: 'Adobe Photoshop',
         desc: 'Desain poster untuk acara tahunan sekolah',
         tech: ['Photoshop', 'Illustrator'],
         image: 'https://via.placeholder.com/400x200/FF4FD8/FFFFFF?text=Poster+Event',
-        drive: 'https://drive.google.com/drive/folders/xxxx1'
+        drive: 'https://drive.google.com/drive/folders/1PmohRZl0c49PuotNDUEGyCtdcwY7nU6U'
     },
     {
-        title: 'Branding UMKM',
+        title: 'Adobe Ilustrator',
         desc: 'Desain logo & identity untuk bisnis lokal',
         tech: ['Illustrator', 'Figma'],
         image: 'https://via.placeholder.com/400x200/FF00AA/FFFFFF?text=Branding',
-        drive: 'https://drive.google.com/drive/folders/xxxx2'
+        drive: 'https://drive.google.com/drive/folders/1PmohRZl0c49PuotNDUEGyCtdcwY7nU6U'
     },
     {
-        title: 'Motion Intro',
+        title: 'Typography',
         desc: 'Animasi opening untuk YouTube channel',
         tech: ['After Effects', 'Premiere'],
-        image: 'https://via.placeholder.com/400x200/FF4FD8/FFFFFF?text=Motion+Intro',
-        drive: 'https://drive.google.com/drive/folders/xxxx3'
+        image: 'typography.png.jpeg',
+        drive: 'https://drive.google.com/drive/folders/1PmohRZl0c49PuotNDUEGyCtdcwY7nU6U'
     },
     {
-        title: 'UI/UX App',
+        title: 'Komik',
         desc: 'Desain interface aplikasi mobile',
         tech: ['Figma', 'Prototype'],
-        image: 'https://via.placeholder.com/400x200/FF00AA/FFFFFF?text=UI+UX',
-        drive: 'https://drive.google.com/drive/folders/xxxx4'
+        image: 'komik.png.jpeg',
+        drive: 'https://drive.google.com/drive/folders/1PmohRZl0c49PuotNDUEGyCtdcwY7nU6U'
     },
     {
-        title: 'Ilustrasi Karakter',
+        title: 'Typeshoot',
         desc: 'Desain karakter untuk game',
         tech: ['Procreate', 'Photoshop'],
-        image: 'https://via.placeholder.com/400x200/FF4FD8/FFFFFF?text=Ilustrasi',
-        drive: 'https://drive.google.com/drive/folders/xxxx5'
+        image: 'typeshoot.png.jpeg',
+        drive: 'https://drive.google.com/drive/folders/1PmohRZl0c49PuotNDUEGyCtdcwY7nU6U'
     }
 ];
 
